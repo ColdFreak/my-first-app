@@ -1,6 +1,7 @@
  machine:
+   # timezoneを設定すると、script中のdateなどのコマンドの結果も日本時間になる
    timezone:
-     Asia/Tokyo
+     Asia/Tokyo 
    java:
      version: oraclejdk8
 
