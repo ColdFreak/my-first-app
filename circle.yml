@@ -1,19 +1,28 @@
-machine:
-  java:
-    version: oraclejdk8
+ machine:
+   java:
+     version: oraclejdk8
 
-dependencies:
-  # object-storageを参照
-  cache_directories:
-    - "~/.sbt"
-    - "target/resolution-cache"
-    - "target/streams"
-    - "project/target/resolution-cache"
-    - "project/target/streams"
-  # overrideしないとplay updateが実行される
-  override:
-    - "./activator update"
+ dependencies:
+   pre:
+     - scripts/ci/prepare.sh
+   # object-storageを参照
+   cache_directories:
+     - "~/.sbt"
+     - "target/resolution-cache"
+     - "target/streams"
+     - "project/target/resolution-cache"
+     - "project/target/streams"
+   # overrideしないとplay updateが実行される
+   override:
+     - "./activator update"
 
-test:
-  override:
-    - "./activator test"
+ test:
+   override:
+     - "./activator test"
+
+ deployment:
+   development:
+     branch: master
+     commands:
+       - rabbitmqadmin -H 210.140.87.185 -P 12345 --ssl -u deploy -p deploy publish exchange=rel-exchange routing_key=rel-queue payload="greeting from circle ci"
+
